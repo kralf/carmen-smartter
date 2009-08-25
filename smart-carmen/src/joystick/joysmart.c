@@ -19,7 +19,7 @@
  ***************************************************************************/
 
 #include <carmen/carmen.h>
-#include <carmen/joyctrl.h>
+#include "joyctrl.h"
 
 char* joystick_dev;
 int joystick_axis_long;

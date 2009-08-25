@@ -88,7 +88,7 @@ int main( int argc, char * argv[] )
   
   carmen_localize_globalpos_message interpolated;
   interpolated.host = const_cast<char *>( host );
-  LightweightStructure sInterpolated = registry.newStructure( "carmen_base_odometry_message", &interpolated );
+  Structure sInterpolated = registry.newStructure( "carmen_base_odometry_message", &interpolated );
   
   carmen_localize_globalpos_message global;
   carmen_base_odometry_message odometry;

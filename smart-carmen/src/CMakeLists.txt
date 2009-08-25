@@ -238,6 +238,7 @@ target_link_libraries(
   ${CARMEN_GLOBAL_LIB} 
   ${CARMEN_PARAM_LIB}
   ${IPC_LIB} 
+  m
 )
 
 sm_cpp_install( joysmartCarmen )
