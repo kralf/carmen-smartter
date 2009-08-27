@@ -25,6 +25,14 @@ add_library(
   ${ALASCA_INTERFACE_SRC}
 )
 
+target_link_libraries(   
+  alasca-interface
+  ${Z_LIB} 
+  ${IPC_LIB} 
+  ${CARMEN_GLOBAL_LIB} 
+)
+
+
 sm_cpp_install( alasca-interface )
 
 
@@ -37,6 +45,13 @@ file( GLOB SMART_INTERFACE_SRC smart-interface/*.c )
 add_library( 
   smart-interface SHARED
   ${SMART_INTERFACE_SRC}
+)
+
+target_link_libraries(   
+  smart-interface
+  ${Z_LIB} 
+  ${IPC_LIB} 
+  ${CARMEN_GLOBAL_LIB} 
 )
 
 sm_cpp_install( smart-interface )
@@ -52,6 +67,13 @@ add_library(
   ${GYRO_INTERFACE_SRC}
 )
 
+target_link_libraries(   
+  gyro-interface
+  ${Z_LIB} 
+  ${IPC_LIB} 
+  ${CARMEN_GLOBAL_LIB} 
+)
+
 sm_cpp_install( gyro-interface )
 
 #-------------------------------------------------------------------------------
@@ -64,6 +86,14 @@ add_library(
   locfilter-interface SHARED
   ${LOCFILTER_INTERFACE_SRC}
 )
+
+target_link_libraries(   
+  locfilter-interface
+  ${Z_LIB} 
+  ${IPC_LIB} 
+  ${CARMEN_GLOBAL_LIB} 
+)
+
 
 sm_cpp_install( locfilter-interface )
 
@@ -104,8 +134,5 @@ target_link_libraries(
   elroblogger
   m
   logger-write
-  ${Z_LIB} 
-  ${CARMEN_GLOBAL_LIB} 
   ${CARMEN_PARAM_LIB} 
-  ${IPC_LIB} 
 )

@@ -17,6 +17,7 @@ const int live(1);
 const int playback(2);
 
 void scan_to_message(AXT_SCAN_STR *scan, axt_message *msg) {
+  size_t i;
   msg->num_points = scan->header.num_points;
   msg->version = scan->header.version;
   msg->scanner_type = scan->header.scanner_type;
@@ -49,6 +50,7 @@ void scan_to_message(AXT_SCAN_STR *scan, axt_message *msg) {
 }
 
 void message_to_scan(axt_message *msg, AXT_SCAN_STR *scan) {
+  size_t i;
   scan->header.version = msg->version;
   scan->header.scanner_type = msg->scanner_type;
   scan->header.ecu_id = msg->ecu_id;
@@ -71,7 +73,7 @@ void message_to_scan(axt_message *msg, AXT_SCAN_STR *scan) {
 
 void axt_handler(axt_message *msg) {
   AXT_SCAN_STR scan;
-  axt_handle_carmen_message(msg, &scan);
+  message_to_scan(msg, &scan);
 }
 
 void handle_args(int argc, char** argv, string &filename, int &mode)
@@ -136,7 +138,8 @@ int main(int argc, char** argv)
     axt_get_scan_from_file(f, &scan);
 
     while (1) {
-      axt_send_message(&scan, &msg);
+      scan_to_message(&scan, &msg);
+      axt_send_message(&msg);
       IPC_listen(5);
     }
   }
@@ -149,7 +152,8 @@ int main(int argc, char** argv)
 
     while (1) {
       if (axt_parse(sd, &scan) == AXT_MSG_TYPE_SCAN) {
-        axt_send_message(&scan, &msg);
+        scan_to_message(&scan, &msg);
+        axt_send_message(&msg);
         num_scans++;
       }
 

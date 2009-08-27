@@ -17,6 +17,13 @@ void axt_define_message() {
   carmen_test_ipc_exit(err, "Could not define message", AXT_MESSAGE_NAME);
 }
 
+void axt_send_message(axt_message *msg) {
+  IPC_RETURN_TYPE err = IPC_publishData(AXT_MESSAGE_NAME, msg);
+
+  carmen_test_ipc(err, "Could not publish", AXT_MESSAGE_NAME);
+  return;
+}
+
 void axt_message_alloc(axt_message *msg) {
   msg->channel = (unsigned char*) malloc(5000 * sizeof(int));
   msg->point_status = (unsigned char*) malloc(5000 * sizeof(int));
