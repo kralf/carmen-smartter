@@ -9,7 +9,7 @@ set( PACKAGE_MAINTAINER_NAME "Dizan Vasquez" )
 set( PACKAGE_MAINTAINER_EMAIL "vasquez@mavt.ethz.ch" )
 set( PACKAGE_DESCRIPTION_SUMMARY "Carmen drivers for the smartter platform." )
 set( PACKAGE_DESCRIPTION "Carmen drivers fo the Smartter hardware." )
-set( PACKAGE_DEPENDS "rotor smart-hardware smart-interfaces" )
+set( PACKAGE_DEPENDS "smart-hardware smart-interfaces smart-rotor" )
 
 include( SimpleCMake )
 sm_configure_project()
