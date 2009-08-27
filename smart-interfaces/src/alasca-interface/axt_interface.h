@@ -23,14 +23,10 @@ extern "C" {
   void axt_define_message();
   
   /*!
-   * Sends an AXT_SCAN_STR as carmen message
+   * Sends a carmen message
    */
-  void axt_send_message(AXT_SCAN_STR *scan, axt_message *msg);
+  void axt_send_message(axt_message *msg);
 
-	/*!
-	 * Copy message to AXT_SCAN_STR
-	 */
-  void axt_handle_carmen_message(axt_message *msg, AXT_SCAN_STR *scan);
 
   void axt_message_alloc(axt_message *msg);
   void axt_message_dealloc(axt_message *msg);

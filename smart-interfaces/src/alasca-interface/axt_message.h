@@ -4,7 +4,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-#include <alasca/alascaxt.h>
 
 #define AXT_MESSAGE_NAME "axt_message"
 #define AXT_MESSAGE_FMT "{uint,uint,uint,uint,uint,double,double,uint,<ubyte:1>,<ubyte:1>,<float:1>,<float:1>,<float:1>,double}"
