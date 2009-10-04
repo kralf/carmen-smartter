@@ -17,8 +17,6 @@ using namespace std;
 void initializeRotor( Registry & registry )
 {
   registry.registerType( ROTOR_DEFINITION_STRING( carmen_point_t ) ); 
-  registry.registerMessageType( "carmen_localize_globalpos", ROTOR_DEFINITION_STRING( carmen_localize_globalpos_message ) );
-  registry.subscribeToMessage( "carmen_localize_globalpos" );
   registry.registerMessageType( "carmen_base_odometry", ROTOR_DEFINITION_STRING( carmen_base_odometry_message ) );
   registry.subscribeToMessage( "carmen_base_odometry" );
   registry.registerMessageType( "axt_message", ROTOR_DEFINITION_STRING( axt_message ) );
@@ -53,9 +51,6 @@ int main( int argc, char * argv[] )
       if ( msg.name() == "carmen_base_odometry" ) {
         Logger::spam( "Got localization message" );
         odometry = * reinterpret_cast<carmen_base_odometry_message *>( sData.buffer() );
-      } else if ( msg.name() == "carmen_localize_globalpos" ) {
-        Logger::spam( "Got globalpos message" );
-        global = *reinterpret_cast<carmen_localize_globalpos_message *>( sData.buffer() );
       } else if ( msg.name() == "axt_message" ) {
         Logger::spam( "Got alasca message" );
         axt_message & data     = * reinterpret_cast<axt_message*>( sData.buffer() );
