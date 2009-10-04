@@ -106,34 +106,34 @@ target_link_libraries(
 sm_cpp_install( locfilterCarmen )
 
 #-------------------------------------------------------------------------------
-# elrobCarmen
+# smartFrontLaser
 #-------------------------------------------------------------------------------
 
-file( GLOB ELROB_CARMEN_SRC elrob-carmen/*.cpp )
+file( GLOB SMART_FRONT_LASER_SRC smartFrontLaser/*.cpp )
 
-add_executable( elrobCarmen ${ELROB_CARMEN_SRC} )
+add_executable( smartFrontLaser ${SMART_FRONT_LASER_SRC} )
 
 target_link_libraries( 
-  elrobCarmen
+  smartFrontLaser
   ${ROTOR_LIB}
 )
 
-sm_cpp_install( elrobCarmen )
+sm_cpp_install( smartFrontLaser )
 
 #-------------------------------------------------------------------------------
 # elrobLocalize
 #-------------------------------------------------------------------------------
 
-file( GLOB ELROB_LOCALIZE_SRC elrob-localize/*.cpp )
+file( GLOB SMART_LOCALIZE_SRC smartLocalize/*.cpp )
 
-add_executable( elrobLocalize ${ELROB_LOCALIZE_SRC} )
+add_executable( smartLocalize ${SMART_LOCALIZE_SRC} )
 
 target_link_libraries( 
-  elrobLocalize
+  smartLocalize
   ${ROTOR_LIB}
 )
 
-sm_cpp_install( elrobLocalize )
+sm_cpp_install( smartLocalize )
 
 #-------------------------------------------------------------------------------
 # joysmartCarmen

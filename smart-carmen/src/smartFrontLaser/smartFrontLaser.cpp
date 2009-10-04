@@ -1,4 +1,4 @@
-#include "Messages.h"
+#include <smart-rotor-interfaces/Messages.h>
 #include <rotor/RemoteRegistry.h>
 #include <rotor/BaseOptions.h>
 #include <rotor/NetUtils.h>
@@ -83,17 +83,10 @@ int main( int argc, char * argv[] )
             }
           }
         }
-/*        laser.laser_pose.theta = global.globalpos.theta;
-        laser.laser_pose.x     = global.globalpos.x + laserDistance * cos( laser.laser_pose.theta );
-        laser.laser_pose.y     = global.globalpos.y + laserDistance * sin( laser.laser_pose.theta );
-        
-        laser.robot_pose.theta = global.globalpos.theta;
-        laser.robot_pose.x     = global.globalpos.x;
-        laser.robot_pose.y     = global.globalpos.y;*/
-        
+
         laser.laser_pose.theta = odometry.theta;
-        laser.laser_pose.x     = odometry.x + laserDistance * cos( laser.laser_pose.theta );
-        laser.laser_pose.y     = odometry.y + laserDistance * sin( laser.laser_pose.theta );
+        laser.laser_pose.x     = odometry.x + laserDistance * cos( -laser.laser_pose.theta );
+        laser.laser_pose.y     = odometry.y + laserDistance * sin( -laser.laser_pose.theta );
         
         laser.robot_pose.theta = odometry.theta;
         laser.robot_pose.x     = odometry.x;
