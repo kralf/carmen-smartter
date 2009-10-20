@@ -7,21 +7,21 @@
  * Roy, Sebastian Thrun, Dirk Haehnel, Cyrill Stachniss,
  * and Jared Glover
  *
- * CARMEN is free software; you can redistribute it and/or 
- * modify it under the terms of the GNU General Public 
- * License as published by the Free Software Foundation; 
+ * CARMEN is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation;
  * either version 2 of the License, or (at your option)
  * any later version.
  *
  * CARMEN is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied 
+ * but WITHOUT ANY WARRANTY; without even the implied
  * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
- * PURPOSE.  See the GNU General Public License for more 
+ * PURPOSE.  See the GNU General Public License for more
  * details.
  *
- * You should have received a copy of the GNU General 
+ * You should have received a copy of the GNU General
  * Public License along with CARMEN; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place, 
+ * Free Software Foundation, Inc., 59 Temple Place,
  * Suite 330, Boston, MA  02111-1307 USA
  *
  ********************************************************/
@@ -76,8 +76,6 @@ double control_max_rv = 0.5;
 int control_min_acceleration = -1.0;
 int control_max_acceleration = 1.0;
 
-carmen_base_velocity_message velocity;
-
 double tv = 0.0;
 double steering_angle = 0.0;
 
@@ -87,6 +85,9 @@ double odometry_theta = 0.0;
 double odometry_tv = 0.0;
 double odometry_rv = 0.0;
 double odometry_acceleration = 0.0;
+
+smart_velocity_message smart_velocity;
+carmen_base_velocity_message base_velocity;
 
 void smart_sigint_handler(int q __attribute__((unused))) {
   quit = 1;
@@ -112,13 +113,13 @@ int smart_read_parameters(int argc, char **argv) {
 
     {"smart", "control_freq", CARMEN_PARAM_DOUBLE, &control_freq, 0, NULL},
 
-    {"smart", "control_steering_enable", CARMEN_PARAM_ONOFF, 
+    {"smart", "control_steering_enable", CARMEN_PARAM_ONOFF,
       &control_steering_enable, 0, NULL},
-    {"smart", "control_steering_p", CARMEN_PARAM_DOUBLE, 
+    {"smart", "control_steering_p", CARMEN_PARAM_DOUBLE,
       &control_steering_p, 1, NULL},
-    {"smart", "control_steering_i", CARMEN_PARAM_DOUBLE, 
+    {"smart", "control_steering_i", CARMEN_PARAM_DOUBLE,
       &control_steering_i, 1, NULL},
-    {"smart", "control_steering_d", CARMEN_PARAM_DOUBLE, 
+    {"smart", "control_steering_d", CARMEN_PARAM_DOUBLE,
       &control_steering_d, 1, NULL},
     {"smart", "control_max_steering", CARMEN_PARAM_DOUBLE,
       &control_max_steering, 0, NULL},
@@ -142,26 +143,26 @@ int smart_read_parameters(int argc, char **argv) {
 }
 
 int smart_open() {
-  int result = -1;  
+  int result = -1;
   fprintf(stderr, "Opening Smart CAN connection... ");
 
   if (!canHWInit(SMART_VCAN_BUSID, SMART_VCAN_BAUD_RATE, vcan_dev) && \
     smart_sensor_update()) {
     cstDoubleSetVoltage(SMART_ICAN_BUSID, 2.5, 1);
     cstDoubleSetVoltage(SMART_ICAN_BUSID, 0.0, 0);
-  
+
     msg[0]=0;
     msg[1]=0;
-    msg[2]=0;  
+    msg[2]=0;
     msg[3]=0;
     msg[4]=0;
     msg[5]=1;
     msg[6]=1;
     msg[7]=0;
-  
+
     result = my_send_can_message(SMART_ICAN_BUSID, 0x88, msg);
   }
-  
+
   carmen_ipc_sleep(0.5);
 
   fprintf(stderr, result ? "failure\n" : "success\n");
@@ -185,27 +186,27 @@ int smart_brake_calibrate() {
     result = 0;
     carmen_ipc_sleep(1.0);
 
-    if (lss_set_max_drive_current(SMART_ICAN_BUSID, 0.5, 1.0)) 
+    if (lss_set_max_drive_current(SMART_ICAN_BUSID, 0.5, 1.0))
       result = -1;
 
     if (!result && !lss_test_stroke_min(SMART_ICAN_BUSID)) {
       fprintf(stderr, "  minimum brake motor stroke\n");
       carmen_ipc_sleep(7.5);
     }
-    else 
+    else
       result = -1;
 
     if (!result && !lss_test_stroke_max(SMART_ICAN_BUSID)) {
       fprintf(stderr, "  maximum brake motor stroke\n");
       carmen_ipc_sleep(6.0);
     }
-    else 
+    else
       result = -1;
-    
+
     if (!result && !lss_set_position(SMART_ICAN_BUSID, LSS_MAX_POSITION)) {
       fprintf(stderr, "  maximum brake position... ");
       carmen_ipc_sleep(3.0);
-      
+
       while (lss.actual_position == 0.0) {
         lss_get_actual_position(SMART_ICAN_BUSID);
         smart_sensor_update();
@@ -216,7 +217,7 @@ int smart_brake_calibrate() {
       brake_accurate_max_position = lss.actual_position;
       fprintf(stderr, "%.2f mm\n", brake_accurate_max_position);
     }
-    else 
+    else
       result = -1;
 
     if (!result) {
@@ -236,7 +237,7 @@ int smart_brake_calibrate() {
 
       fprintf(stderr, "%.2f mm\n", lss.actual_position);
     }
-    
+
     if (!result) {
       lss.homing_done = 1;
 
@@ -246,20 +247,20 @@ int smart_brake_calibrate() {
       acc_control_input.brake_ready_to_serve = 1;
 
       control_config.accept_brake_ajustment = 0;
-      
+
       if (!lss_set_max_drive_current(SMART_ICAN_BUSID, 1.0, 1.0)) {
         fprintf(stderr, "  brake offset is %.2f mm\n",
           acc_control_input.brake_accurate_offset);
         fprintf(stderr, "  brake range is %.2f mm\n",
           acc_control_input.brake_accurate_range);
       }
-      else 
-        result = -1;    
+      else
+        result = -1;
     }
   }
   else
     fprintf(stderr, "  vehicle velocity exceeds safety limits\n");
-  
+
   fprintf(stderr, result ? "failure\n" : "success\n");
   return result;
 }
@@ -272,13 +273,13 @@ int smart_activate_esx() {
 
   msg[0] = 1;
   msg[1] = 0;
-  msg[2] = 0;  
+  msg[2] = 0;
   msg[3] = (unsigned char)(max_brake_stroke >> 8);
   msg[4] = (unsigned char)(max_brake_stroke);
   msg[5] = 0;
   msg[6] = 0;
   msg[7] = 0;
-  
+
   result = my_send_can_message(SMART_ICAN_BUSID, 0x88, msg);
 
   fprintf(stderr, result ? "failure\n" : "success\n");
@@ -311,10 +312,10 @@ void smart_control_steering(double steering_angle, double update_freq) {
 
   control_config.enable_steering_ctrl = 1;
 
-  cstSteeringPID(control_steering_p, control_steering_i, control_steering_d, 
-    1.0/update_freq, steering_angle, current_steering_angle, 
+  cstSteeringPID(control_steering_p, control_steering_i, control_steering_d,
+    1.0/update_freq, steering_angle, current_steering_angle,
     current_steering_voltage, &steering_voltage);
-      
+
   steering_voltage = (steering_voltage < STEERING_CONTROL_MIN_OUTPUT_VOLTAGE) ?
     STEERING_CONTROL_MIN_OUTPUT_VOLTAGE : steering_voltage;
   steering_voltage = (steering_voltage > STEERING_CONTROL_MAX_OUTPUT_VOLTAGE) ?
@@ -332,7 +333,7 @@ void smart_control_velocity(double velocity, double update_time) {
 
   if (velocity == 0.0) {
     acc_control_input.gas_pedal_cmd = 0.0;
-    acc_control_input.brake_pedal_cmd = 
+    acc_control_input.brake_pedal_cmd =
       acc_control_input.brake_accurate_offset+
       acc_control_input.brake_accurate_range;
   }
@@ -352,7 +353,7 @@ void smart_integrate_odometry(double update_freq) {
   double wheel_circum = 2.0*M_PI*wheel_radius;
   double sign = (smart.engine.actual_gear == 7) ? -1.0 : 1.0;
 
-  if (!smart.wheelspeed.rear_right_not_plausible && 
+  if (!smart.wheelspeed.rear_right_not_plausible &&
     !smart.wheelspeed.rear_left_not_plausible) {
     odometry_tv = sign*wheel_circum*0.5*(smart.wheelspeed.rear_right+
       smart.wheelspeed.rear_left);
@@ -374,7 +375,7 @@ void smart_integrate_odometry(double update_freq) {
   odometry_acceleration = (odometry_tv-odometry_last_tv)*update_freq;
 }
 
-void smart_control_cycle(double tv, double steering_angle, double update_time, 
+void smart_control_cycle(double tv, double steering_angle, double update_time,
   double update_freq) {
   if (control_velocity_enable)
     smart_control_velocity(tv, update_time);
@@ -382,7 +383,16 @@ void smart_control_cycle(double tv, double steering_angle, double update_time,
     smart_control_steering(steering_angle, update_freq);
 }
 
-void smart_velocity_handler(carmen_base_velocity_message* velocity) {
+void smart_velocity_handler(smart_velocity_message* velocity) {
+  tv = (velocity->tv > control_max_tv) ? control_max_tv : velocity->tv;
+
+  steering_angle = (steering_angle > control_max_steering) ?
+    control_max_steering : steering_angle;
+  steering_angle = (steering_angle < -control_max_steering) ?
+    -control_max_steering : steering_angle;
+}
+
+void base_velocity_handler(carmen_base_velocity_message* velocity) {
   tv = (velocity->tv > control_max_tv) ? control_max_tv : velocity->tv;
   tv = (velocity->tv < -control_max_tv) ? -control_max_tv : velocity->tv;
 
@@ -390,9 +400,9 @@ void smart_velocity_handler(carmen_base_velocity_message* velocity) {
   if (tv != 0.0)
     steering_angle = atan2(r, axle_base);
 
-  steering_angle = (steering_angle > control_max_steering) ? 
+  steering_angle = (steering_angle > control_max_steering) ?
     control_max_steering : steering_angle;
-  steering_angle = (steering_angle < -control_max_steering) ? 
+  steering_angle = (steering_angle < -control_max_steering) ?
     -control_max_steering : steering_angle;
 }
 
@@ -404,14 +414,16 @@ int main(int argc, char *argv[]) {
     carmen_die("ERROR: Smart initialization failed\n");
   if (control_velocity_enable && smart_brake_calibrate())
     carmen_die("ERROR: Brake calibration failed\n");
-  
+
   if (control_velocity_enable && smart_activate_esx())
     carmen_die("ERROR: Emergency stop activation failed\n");
 
   smart_control_init();
 
-  carmen_base_subscribe_velocity_message(&velocity, 
+  smart_subscribe_velocity_message(&smart_velocity,
     (carmen_handler_t)smart_velocity_handler, CARMEN_SUBSCRIBE_LATEST);
+  carmen_base_subscribe_velocity_message(&base_velocity,
+    (carmen_handler_t)base_velocity_handler, CARMEN_SUBSCRIBE_LATEST);
 
   signal(SIGINT, smart_sigint_handler);
 
@@ -428,12 +440,12 @@ int main(int argc, char *argv[]) {
     double update_start = carmen_get_time();
     if (smart_sensor_update()) {
       double update_time = 0.5*(carmen_get_time()+update_start);
-  
+
       smart_integrate_odometry(update_freq);
       smart_control_cycle(tv, steering_angle, update_time, update_freq);
-  
+
       smart_publish_status(&smart, update_time);
-      smart_publish_odometry(odometry_x, odometry_y, odometry_theta, 
+      smart_publish_odometry(odometry_x, odometry_y, odometry_theta,
         odometry_tv, odometry_rv, odometry_acceleration, update_time);
     }
 
@@ -445,7 +457,7 @@ int main(int argc, char *argv[]) {
     if ((now-interval_start) >= SMART_UPDATE_INTERVAL) {
       fprintf(stderr, "Update frequency is %4.2f Hz\n",
         num_cycles/(now-interval_start));
-  
+
       num_cycles = 0;
       interval_start = now;
     }

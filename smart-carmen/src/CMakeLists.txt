@@ -32,8 +32,8 @@ file( GLOB AXT_CARMEN_SRC alasca/*.c alasca/*.cpp )
 
 add_executable( axtCarmen ${AXT_CARMEN_SRC} )
 
-target_link_libraries( 
-  axtCarmen 
+target_link_libraries(
+  axtCarmen
   m
   ${CARMEN_ALASCA_LIB}
 )
@@ -48,14 +48,14 @@ file( GLOB SMART_CARMEN_SRC smart/*.c smart/*.cpp )
 
 add_executable( smartCarmen ${SMART_CARMEN_SRC} )
 
-target_link_libraries( 
+target_link_libraries(
   smartCarmen
   ${SMART_LIB}
   ${CARMEN_SMART_LIB}
   ${CARMEN_BASE_LIB}
-  ${Z_LIB} 
-  ${IPC_LIB} 
-  ${CARMEN_GLOBAL_LIB} 
+  ${Z_LIB}
+  ${IPC_LIB}
+  ${CARMEN_GLOBAL_LIB}
   ${CARMEN_PARAM_LIB}
 )
 
@@ -69,13 +69,13 @@ file( GLOB GYRO_CARMEN_SRC gyro/*.c gyro/*.cpp )
 
 add_executable( gyroCarmen ${GYRO_CARMEN_SRC} )
 
-target_link_libraries( 
+target_link_libraries(
   gyroCarmen
   ${DSP3000_LIB}
   ${CARMEN_GYRO_LIB}
-  ${Z_LIB} 
-  ${IPC_LIB} 
-  ${CARMEN_GLOBAL_LIB} 
+  ${Z_LIB}
+  ${IPC_LIB}
+  ${CARMEN_GLOBAL_LIB}
   ${CARMEN_PARAM_LIB}
 )
 
@@ -90,16 +90,16 @@ file( GLOB LOCFILTER_CARMEN_SRC locfilter/*.c locfilter/*.cpp )
 
 add_executable( locfilterCarmen ${LOCFILTER_CARMEN_SRC} )
 
-target_link_libraries( 
+target_link_libraries(
   locfilterCarmen
   gyro-interface
   m
-  ${CARMEN_BASE_LIB} 
+  ${CARMEN_BASE_LIB}
   ${CARMEN_LOCFILTER_LIB}
   ${CARMEN_LOCALIZE_LIB}
-  ${Z_LIB} 
-  ${IPC_LIB} 
-  ${CARMEN_GLOBAL_LIB} 
+  ${Z_LIB}
+  ${IPC_LIB}
+  ${CARMEN_GLOBAL_LIB}
   ${CARMEN_PARAM_LIB}
 )
 
@@ -113,7 +113,7 @@ file( GLOB SMART_FRONT_LASER_SRC smartFrontLaser/*.cpp )
 
 add_executable( smartFrontLaser ${SMART_FRONT_LASER_SRC} )
 
-target_link_libraries( 
+target_link_libraries(
   smartFrontLaser
   ${ROTOR_LIB}
 )
@@ -128,7 +128,7 @@ file( GLOB SMART_LOCALIZE_SRC smartLocalize/*.cpp )
 
 add_executable( smartLocalize ${SMART_LOCALIZE_SRC} )
 
-target_link_libraries( 
+target_link_libraries(
   smartLocalize
   ${ROTOR_LIB}
 )
@@ -143,12 +143,13 @@ file( GLOB JOYSMART_CARMEN_SRC joystick/*.c joystick/*.cpp )
 
 add_executable( joysmartCarmen ${JOYSMART_CARMEN_SRC} )
 
-target_link_libraries( 
+target_link_libraries(
   joysmartCarmen
+  ${CARMEN_SMART_LIB}
   ${CARMEN_ROBOT_LIB}
-  ${Z_LIB} 
-  ${IPC_LIB} 
-  ${CARMEN_GLOBAL_LIB} 
+  ${Z_LIB}
+  ${IPC_LIB}
+  ${CARMEN_GLOBAL_LIB}
   ${CARMEN_PARAM_LIB}
   m
 )

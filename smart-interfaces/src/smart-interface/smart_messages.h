@@ -21,10 +21,25 @@ typedef struct {
   double rv_front_left;   //!< Rotational velocity of left front wheel in [rps].
   double rv_rear_right;   //!< Rotational velocity of right rear wheel in [rps].
   double rv_rear_left;    //!< Rotational velocity of left rear wheel in [rps].
-  
+
   double timestamp;
   char* host;
 } smart_status_message;
+
+#ifdef __cplusplus
+}
+#endif
+
+#define SMART_VELOCITY_MESSAGE_NAME "smart_velocity_message"
+#define SMART_VELOCITY_MESSAGE_FMT "{double,double,double,string}"
+
+typedef struct {
+  double tv;              //!< Translational velocity of vehicle in [m/s].
+  double steering_angle;  //!< Steering angle in [rad].
+
+  double timestamp;
+  char* host;
+} smart_velocity_message;
 
 #ifdef __cplusplus
 }
