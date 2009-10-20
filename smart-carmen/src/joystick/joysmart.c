@@ -55,6 +55,9 @@ void send_smart_velocity_command(double tv, double steering) {
   else if (v.steering_angle < -control_max_steering)
     v.steering_angle = -control_max_steering;
 
+  carmen_verbose("tv = %6.2f m/s  steering_angle = %6.2f deg\n",
+    v.tv, carmen_radians_to_degrees(v.steering_angle));
+
   err = IPC_publishData(SMART_VELOCITY_MESSAGE_NAME, &v);
   carmen_test_ipc(err, "Could not publish", SMART_VELOCITY_MESSAGE_NAME);
 }
@@ -95,6 +98,7 @@ void read_parameters(int argc, char **argv) {
 }
 
 int main(int argc, char **argv) {
+  IPC_RETURN_TYPE err;
   double cmd_tv = 0, cmd_steering = 0;
   double timestamp;
 
@@ -102,6 +106,11 @@ int main(int argc, char **argv) {
   carmen_param_check_version(argv[0]);
   read_parameters(argc, argv);
   signal(SIGINT, sig_handler);
+
+  err = IPC_defineMsg(SMART_VELOCITY_MESSAGE_NAME, IPC_VARIABLE_LENGTH,
+    SMART_VELOCITY_MESSAGE_FMT);
+  carmen_test_ipc_exit(err, "Could not define message",
+    SMART_VELOCITY_MESSAGE_NAME);
 
   fprintf(stderr,"Looking for joystick at device: %s\n", joystick_dev);
 
@@ -148,7 +157,7 @@ int main(int argc, char **argv) {
           cmd_tv = (joystick.axes[joystick_axis_long]) ?
             joystick.axes[joystick_axis_long]/32767.0*control_max_tv : 0.0;
           cmd_steering = (joystick.axes[joystick_axis_lat]) ?
-            joystick.axes[joystick_axis_lat]/32767.0*
+            -joystick.axes[joystick_axis_lat]/32767.0*
             control_max_steering : 0.0;
         }
         else {
