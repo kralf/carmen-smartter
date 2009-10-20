@@ -101,15 +101,6 @@ double smart_theta_mod_2pi(double theta) {
   return theta;
 }
 
-double smart_theta_mod_pi(double theta) {
-  while (theta > 0.5*M_PI)
-    theta -= (M_PI);
-  while (theta < -0.5*M_PI)
-    theta += (M_PI);
-
-  return theta;
-}
-
 int smart_read_parameters(int argc, char **argv) {
   int num_params;
   carmen_param_t params[] = {
@@ -231,7 +222,11 @@ int smart_brake_calibrate() {
     if (!result) {
       fprintf(stderr, "  minimum brake position... ");
 
-      while (smart_sensor_update() && smart.status.brake_light_on) {
+      smart_sensor_update();
+      carmen_ipc_sleep(1.0);
+
+      while (smart.status.brake_light_on) {
+        smart_sensor_update();
         if (lss_get_actual_position(SMART_ICAN_BUSID) ||
           lss_set_position(SMART_ICAN_BUSID, (lss.actual_position-1.0))) {
           result = -1;
@@ -391,8 +386,9 @@ void smart_velocity_handler(carmen_base_velocity_message* velocity) {
   tv = (velocity->tv > control_max_tv) ? control_max_tv : velocity->tv;
   tv = (velocity->tv < -control_max_tv) ? -control_max_tv : velocity->tv;
 
-  double r = tv/velocity->rv;
-  steering_angle = smart_theta_mod_pi(atan2(axle_base, r));
+  double r = -tv/velocity->rv;
+  if (tv != 0.0)
+    steering_angle = atan2(r, axle_base);
 
   steering_angle = (steering_angle > control_max_steering) ? 
     control_max_steering : steering_angle;

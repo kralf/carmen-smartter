@@ -41,6 +41,11 @@ int smart_ipc_initialize(int argc, char *argv[]) {
   carmen_test_ipc_exit(err, "Could not define message",
     CARMEN_BASE_ODOMETRY_NAME);
 
+  err = IPC_defineMsg(CARMEN_BASE_VELOCITY_NAME, IPC_VARIABLE_LENGTH,
+    CARMEN_BASE_VELOCITY_FMT);
+  carmen_test_ipc_exit(err, "Could not define message",
+    CARMEN_BASE_VELOCITY_NAME);
+
   err = IPC_defineMsg(SMART_STATUS_MESSAGE_NAME, IPC_VARIABLE_LENGTH,
     SMART_STATUS_MESSAGE_FMT);
   carmen_test_ipc_exit(err, "Could not define message",
