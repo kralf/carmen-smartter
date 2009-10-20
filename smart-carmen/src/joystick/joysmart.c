@@ -20,8 +20,9 @@
 
 #include <carmen/carmen.h>
 
+#include <smart-interface/smart_messages.h>
+
 #include "joyctrl.h"
-#include "joysmart_ipc.h"
 
 char* joystick_dev;
 int joystick_axis_long;
@@ -37,7 +38,7 @@ int joystick_activated = 0;
 
 void send_smart_velocity_command(double tv, double steering) {
   IPC_RETURN_TYPE err;
-  static smart_base_velocity_message v;
+  static smart_velocity_message v;
 
   v.tv = tv;
   v.steering_angle = steering;
@@ -60,7 +61,7 @@ void send_smart_velocity_command(double tv, double steering) {
 
 void sig_handler(int x) {
   if (x == SIGINT) {
-    send_base_velocity_command(0.0, 0.0);
+    send_smart_velocity_command(0.0, 0.0);
 
     carmen_close_joystick(&joystick);
     carmen_ipc_disconnect();
@@ -133,7 +134,7 @@ int main(int argc, char **argv) {
         joystick_activated = !joystick_activated;
 
         if (!joystick_activated) {
-          send_base_velocity_command(0.0, 0.0);
+          send_smart_velocity_command(0.0, 0.0);
 
           fprintf(stderr,"Joystick deactivated.\n");
         }
@@ -155,7 +156,7 @@ int main(int argc, char **argv) {
           cmd_steering = 0.0;
         }
 
-        send_base_velocity_command(cmd_tv, cmd_steering);
+        send_smart_velocity_command(cmd_tv, cmd_steering);
       }
     }
     else if (joystick_activated && carmen_get_time()-timestamp > 0.5) {
