@@ -386,6 +386,7 @@ void smart_control_cycle(double tv, double steering_angle, double update_time,
 void smart_velocity_handler(smart_velocity_message* velocity) {
   tv = (velocity->tv > control_max_tv) ? control_max_tv : velocity->tv;
 
+  steering_angle = velocity->steering_angle;
   steering_angle = (steering_angle > control_max_steering) ?
     control_max_steering : steering_angle;
   steering_angle = (steering_angle < -control_max_steering) ?
