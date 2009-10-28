@@ -7,21 +7,21 @@
  * Roy, Sebastian Thrun, Dirk Haehnel, Cyrill Stachniss,
  * and Jared Glover
  *
- * CARMEN is free software; you can redistribute it and/or 
- * modify it under the terms of the GNU General Public 
- * License as published by the Free Software Foundation; 
+ * CARMEN is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation;
  * either version 2 of the License, or (at your option)
  * any later version.
  *
  * CARMEN is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied 
+ * but WITHOUT ANY WARRANTY; without even the implied
  * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
- * PURPOSE.  See the GNU General Public License for more 
+ * PURPOSE.  See the GNU General Public License for more
  * details.
  *
- * You should have received a copy of the GNU General 
+ * You should have received a copy of the GNU General
  * Public License along with CARMEN; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place, 
+ * Free Software Foundation, Inc., 59 Temple Place,
  * Suite 330, Boston, MA  02111-1307 USA
  *
  ********************************************************/
@@ -40,6 +40,7 @@
 
 int quit = 0;
 
+locfilter_init_message init;
 carmen_base_odometry_message odometry;
 gyro_integrated_message gyro;
 
@@ -102,17 +103,23 @@ void locfilter_update(double update_freq) {
     filtered_x += odometry.tv*cos(filtered_theta)/update_freq;
     filtered_y += odometry.tv*sin(filtered_theta)/update_freq;
     gyro_theta = gyro.theta;
-  
+
     carmen_point_t filteredpos = {filtered_x, filtered_y, filtered_theta};
     carmen_point_t odometrypos = {odometry.x, odometry.y, odometry.theta};
     double timestamp = max(odometry.timestamp, gyro.timestamp);
-  
+
     locfilter_publish_filteredpos(&filteredpos, &odometrypos, timestamp);
-  
+
     num_updates++;
   }
   else
     locfilter_initialize();
+}
+
+void locfilter_init_handler(locfilter_init_message* init) {
+  filtered_x = init->initpos.x;
+  filtered_y = init->initpos.y;
+  filtered_theta = init->initpos.theta;
 }
 
 void locfilter_odometry_handler(carmen_base_odometry_message* odometry) {
@@ -133,9 +140,12 @@ int main(int argc, char *argv[]) {
   odometry.timestamp = 0.0;
   gyro.timestamp = 0.0;
 
-  carmen_base_subscribe_odometry_message(&odometry, 
+  locfilter_subscribe_init_message(&init,
+    (carmen_handler_t)locfilter_init_handler, CARMEN_SUBSCRIBE_LATEST);
+
+  carmen_base_subscribe_odometry_message(&odometry,
     (carmen_handler_t)locfilter_odometry_handler, CARMEN_SUBSCRIBE_LATEST);
-  gyro_subscribe_integrated_message(&gyro, 
+  gyro_subscribe_integrated_message(&gyro,
     (carmen_handler_t)gyro_integrated_handler, CARMEN_SUBSCRIBE_LATEST);
 
   signal(SIGINT, locfilter_sigint_handler);
@@ -150,9 +160,9 @@ int main(int argc, char *argv[]) {
 
     now = carmen_get_time();
     if ((now-interval_start) >= LOCFILTER_UPDATE_INTERVAL) {
-      fprintf(stderr, "Update frequency is %4.2f Hz\n", 
+      fprintf(stderr, "Update frequency is %4.2f Hz\n",
         num_updates/(now-interval_start));
-  
+
       num_updates = 0;
       interval_start = now;
     }

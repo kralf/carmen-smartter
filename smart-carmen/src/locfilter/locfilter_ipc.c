@@ -7,21 +7,21 @@
  * Roy, Sebastian Thrun, Dirk Haehnel, Cyrill Stachniss,
  * and Jared Glover
  *
- * CARMEN is free software; you can redistribute it and/or 
- * modify it under the terms of the GNU General Public 
- * License as published by the Free Software Foundation; 
+ * CARMEN is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public
+ * License as published by the Free Software Foundation;
  * either version 2 of the License, or (at your option)
  * any later version.
  *
  * CARMEN is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied 
+ * but WITHOUT ANY WARRANTY; without even the implied
  * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
- * PURPOSE.  See the GNU General Public License for more 
+ * PURPOSE.  See the GNU General Public License for more
  * details.
  *
- * You should have received a copy of the GNU General 
+ * You should have received a copy of the GNU General
  * Public License along with CARMEN; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place, 
+ * Free Software Foundation, Inc., 59 Temple Place,
  * Suite 330, Boston, MA  02111-1307 USA
  *
  ********************************************************/
@@ -41,10 +41,15 @@ int locfilter_ipc_initialize(int argc, char *argv[]) {
   carmen_test_ipc_exit(err, "Could not define message",
     LOCFILTER_FILTEREDPOS_MESSAGE_NAME);
 
+  err = IPC_defineMsg(LOCFILTER_INIT_MESSAGE_NAME, IPC_VARIABLE_LENGTH,
+    LOCFILTER_INIT_MESSAGE_FMT);
+  carmen_test_ipc_exit(err, "Could not define message",
+    LOCFILTER_INIT_MESSAGE_NAME);
+
   return 0;
 }
 
-void locfilter_publish_filteredpos(carmen_point_p filteredpos, carmen_point_p 
+void locfilter_publish_filteredpos(carmen_point_p filteredpos, carmen_point_p
   odometrypos, double timestamp) {
   locfilter_filteredpos_message msg;
   IPC_RETURN_TYPE err;
@@ -58,4 +63,18 @@ void locfilter_publish_filteredpos(carmen_point_p filteredpos, carmen_point_p
   err = IPC_publishData(LOCFILTER_FILTEREDPOS_MESSAGE_NAME, &msg);
   carmen_test_ipc_exit(err, "Could not publish",
     LOCFILTER_FILTEREDPOS_MESSAGE_NAME);
+}
+
+void locfilter_publish_init(carmen_point_p initpos, double timestamp) {
+  locfilter_init_message msg;
+  IPC_RETURN_TYPE err;
+
+  msg.initpos = *initpos;
+
+  msg.timestamp = timestamp;
+  msg.host = carmen_get_host();
+
+  err = IPC_publishData(LOCFILTER_INIT_MESSAGE_NAME, &msg);
+  carmen_test_ipc_exit(err, "Could not publish",
+    LOCFILTER_INIT_MESSAGE_NAME);
 }
