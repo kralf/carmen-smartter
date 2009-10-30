@@ -11,5 +11,11 @@ set( PACKAGE_DESCRIPTION_SUMMARY "Carmen drivers for the smartter platform." )
 set( PACKAGE_DESCRIPTION "Carmen drivers fo the Smartter hardware." )
 set( PACKAGE_DEPENDS "smart-hardware, smart-interfaces, smart-rotor-interfaces" )
 
+execute_process(
+  COMMAND dpkg --print-architecture
+  OUTPUT_VARIABLE DEBIAN_ARCHITECTURE
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+
 include( SimpleCMake )
 sm_configure_project()

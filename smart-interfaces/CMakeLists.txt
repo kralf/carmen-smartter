@@ -11,5 +11,11 @@ set( PACKAGE_DESCRIPTION_SUMMARY "Carmen interfaces for the Smart platform" )
 set( PACKAGE_DESCRIPTION "Contains all special interfaces and logging facilities for the SmartTer platform" )
 set( PACKAGE_DEPENDS )
 
+execute_process(
+  COMMAND dpkg --print-architecture
+  OUTPUT_VARIABLE DEBIAN_ARCHITECTURE
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+
 include( SimpleCMake )
 sm_configure_project()
