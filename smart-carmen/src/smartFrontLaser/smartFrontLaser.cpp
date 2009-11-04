@@ -16,7 +16,7 @@ using namespace std;
 
 void initializeRotor( Registry & registry )
 {
-  registry.registerType( ROTOR_DEFINITION_STRING( carmen_point_t ) ); 
+  registry.registerType( ROTOR_DEFINITION_STRING( carmen_point_t ) );
   registry.registerMessageType( "carmen_base_odometry", ROTOR_DEFINITION_STRING( carmen_base_odometry_message ) );
   registry.subscribeToMessage( "carmen_base_odometry" );
   registry.registerMessageType( "axt_message", ROTOR_DEFINITION_STRING( axt_message ) );
@@ -34,7 +34,7 @@ int main( int argc, char * argv[] )
   options.setInt( "elrob_carmen", "loggingLevel", 3 );
   RemoteRegistry registry( "CarmenRegistry", "elrob_carmen", options, "lib" );
   initializeRotor( registry );
-  
+
   char host[100];
   strcpy( host, hostName().c_str() );
 
@@ -54,13 +54,13 @@ int main( int argc, char * argv[] )
       } else if ( msg.name() == "axt_message" ) {
         Logger::spam( "Got alasca message" );
         axt_message & data     = * reinterpret_cast<axt_message*>( sData.buffer() );
-            
+
         sLaser["num_readings"]   = 181;
         sLaser["num_remissions"] = 0;
         sLaser.adjust();
         carmen_robot_laser_message & laser = * reinterpret_cast<carmen_robot_laser_message *>( sLaser.buffer() );
         laser.id             = 1;
-        
+
         laser.config.laser_type         = 99;
         laser.config.start_angle        = -M_PI / 2.0;
         laser.config.angular_resolution = M_PI / (rayCount - 1);
@@ -87,15 +87,15 @@ int main( int argc, char * argv[] )
         laser.laser_pose.theta = odometry.theta;
         laser.laser_pose.x     = odometry.x + laserDistance * cos( -laser.laser_pose.theta );
         laser.laser_pose.y     = odometry.y + laserDistance * sin( -laser.laser_pose.theta );
-        
+
         laser.robot_pose.theta = odometry.theta;
         laser.robot_pose.x     = odometry.x;
         laser.robot_pose.y     = odometry.y;
-        
+
         laser.tv               = odometry.tv;
         laser.rv               = odometry.rv;
         laser.turn_axis        = 2;
-        
+
         laser.timestamp    = seconds();
         registry.sendStructure( "carmen_robot_frontlaser", sLaser );
         Logger::spam( "Carmen laser message has been sent" );
