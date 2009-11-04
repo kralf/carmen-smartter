@@ -41,6 +41,7 @@ int main( int argc, char * argv[] )
   carmen_localize_globalpos_message global;
   carmen_base_odometry_message  odometry;
   Structure sLaser     = registry.newStructure( "carmen_robot_laser_message" );
+  sLaser["host"]       = host;
 
   double laserDistance = 1.812 + 0.45;
   double rayCount      = 181;
