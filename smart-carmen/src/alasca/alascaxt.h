@@ -30,20 +30,20 @@ extern "C" {
 #define AXT_PT_STATUS_INVALID 1
 #define AXT_PT_STATUS_RAIN 2
 #define AXT_PT_STATUS_GROUND 3
-#define AXT_PT_STATUS_DIRT 4	
+#define AXT_PT_STATUS_DIRT 4
 
-/*! Raw package header format */ 
+/*! Raw package header format */
 typedef struct _AXT_PKG_HDR_RAW{
   unsigned int type;
   unsigned int timestamp;
 } AXT_PKG_HDR_RAW;
 
-/*! Raw scan header format */ 
+/*! Raw scan header format */
 typedef struct _AXT_SCAN_HDR_RAW{
   unsigned char version;
   unsigned char scanner_type;
-  unsigned char ecu_id; 
-  unsigned char unknown; 
+  unsigned char ecu_id;
+  unsigned char unknown;
 
   unsigned int timestamp;
   short start_angle;
@@ -52,27 +52,27 @@ typedef struct _AXT_SCAN_HDR_RAW{
   unsigned short num_points;
 } AXT_SCAN_HDR_RAW;
 
-/*! Raw scan point format */ 
+/*! Raw scan point format */
 typedef struct _AXT_SCAN_POINT_RAW{
   unsigned char scanner_id;
   unsigned char channel;
   unsigned char sub_channel;
-  unsigned char point_status;  
+  unsigned char point_status;
 
   unsigned short x;
   unsigned short y;
   unsigned short z;
-  short echo_pulse_width; 
+  short echo_pulse_width;
 } AXT_SCAN_POINT_RAW;
 
-/*! Header of a scan message */ 
+/*! Header of a scan message */
 typedef struct _AXT_SCAN_HDR_STR{
 	unsigned int version; ///< Version Number of the protocol specification
 	unsigned int scanner_type; ///< Alasca XT is type 3
-	unsigned int ecu_id; 
+	unsigned int ecu_id;
 
 	unsigned int timestamp; /// Timestamp when the scanner has measured to 0
-	double timestamp_sync; /// Timestamp of the hosting computer	
+	double timestamp_sync; /// Timestamp of the hosting computer
 	float start_angle; ///< in scanner coordinates
 	float end_angle; ///< in scanner coordinates
 	unsigned int scan_counter;
@@ -83,12 +83,12 @@ typedef struct _AXT_SCAN_POINT_STR{
 	unsigned int scanner_id;
 	unsigned int channel; ///< Scan Layer
 	unsigned int sub_channel; ///< echo 1 or 2
-	unsigned int point_status;  
+	unsigned int point_status;
 
 	float x; ///< in scanner coordinates
 	float y; ///< in scanner coordinates
 	float z; ///< in scanner coordinates
-	unsigned int echo_pulse_width; 
+	unsigned int echo_pulse_width;
 } AXT_SCAN_POINT_STR;
 
 typedef struct _AXT_SCAN_STR{
@@ -108,7 +108,7 @@ double axt_get_time();
   @param *sd Handle to socket
   @returns 1 on success
 */
-int axt_connect(char *host, int *sd);
+int axt_connect(const char *host, int *sd);
 
 /*! \brief Closes connection to the scanner
   @param sd Handle to socket

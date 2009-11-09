@@ -3,15 +3,14 @@
 #-------------------------------------------------------------------------------
 
 find_library( ROTOR_LIB rotor )
-find_library( IPC_LIB ipc )
-find_library( CARMEN_GLOBAL_LIB global )
-find_library( CARMEN_PARAM_LIB param_interface )
-find_library( CARMEN_BASE_LIB base_interface )
-find_library( CARMEN_ROBOT_LIB robot_interface )
-find_library( CARMEN_LOCALIZE_LIB localize_interface )
-find_library( CARMEN_SIMULATOR_LIB simulator_interface )
-find_library( CARMEN_GPS_LIB gps_nmea_interface )
-find_library( CARMEN_LASER_LIB laser_interface )
+find_library( CARMEN_GLOBAL_LIB carmen-global )
+find_library( CARMEN_PARAM_LIB carmen-param_interface )
+find_library( CARMEN_BASE_LIB carmen-base_interface )
+find_library( CARMEN_ROBOT_LIB carmen-robot_interface )
+find_library( CARMEN_LOCALIZE_LIB carmen-localize_interface )
+find_library( CARMEN_SIMULATOR_LIB carmen-simulator_interface )
+find_library( CARMEN_GPS_LIB carmen-gps_nmea_interface )
+find_library( CARMEN_LASER_LIB carmen-laser_interface )
 find_library( Z_LIB z )
 
 #-------------------------------------------------------------------------------
@@ -20,16 +19,15 @@ find_library( Z_LIB z )
 
 file( GLOB ALASCA_INTERFACE_SRC alasca-interface/*.c )
 
-add_library( 
+add_library(
   alasca-interface SHARED
   ${ALASCA_INTERFACE_SRC}
 )
 
-target_link_libraries(   
+target_link_libraries(
   alasca-interface
-  ${Z_LIB} 
-  ${IPC_LIB} 
-  ${CARMEN_GLOBAL_LIB} 
+  ${Z_LIB}
+  ${CARMEN_GLOBAL_LIB}
 )
 
 
@@ -42,16 +40,15 @@ sm_cpp_install( alasca-interface )
 
 file( GLOB SMART_INTERFACE_SRC smart-interface/*.c )
 
-add_library( 
+add_library(
   smart-interface SHARED
   ${SMART_INTERFACE_SRC}
 )
 
-target_link_libraries(   
+target_link_libraries(
   smart-interface
-  ${Z_LIB} 
-  ${IPC_LIB} 
-  ${CARMEN_GLOBAL_LIB} 
+  ${Z_LIB}
+  ${CARMEN_GLOBAL_LIB}
 )
 
 sm_cpp_install( smart-interface )
@@ -62,16 +59,15 @@ sm_cpp_install( smart-interface )
 
 file( GLOB GYRO_INTERFACE_SRC gyro-interface/*.c )
 
-add_library( 
+add_library(
   gyro-interface SHARED
   ${GYRO_INTERFACE_SRC}
 )
 
-target_link_libraries(   
+target_link_libraries(
   gyro-interface
-  ${Z_LIB} 
-  ${IPC_LIB} 
-  ${CARMEN_GLOBAL_LIB} 
+  ${Z_LIB}
+  ${CARMEN_GLOBAL_LIB}
 )
 
 sm_cpp_install( gyro-interface )
@@ -82,16 +78,15 @@ sm_cpp_install( gyro-interface )
 
 file( GLOB LOCFILTER_INTERFACE_SRC locfilter-interface/*.c )
 
-add_library( 
+add_library(
   locfilter-interface SHARED
   ${LOCFILTER_INTERFACE_SRC}
 )
 
-target_link_libraries(   
+target_link_libraries(
   locfilter-interface
-  ${Z_LIB} 
-  ${IPC_LIB} 
-  ${CARMEN_GLOBAL_LIB} 
+  ${Z_LIB}
+  ${CARMEN_GLOBAL_LIB}
 )
 
 
@@ -103,21 +98,21 @@ sm_cpp_install( locfilter-interface )
 
 file( GLOB LOGGER_WRITE_SRC logger-write/*.c )
 
-add_library( 
+add_library(
   logger-write SHARED
   ${LOGGER_WRITE_SRC}
 )
 
-target_link_libraries( 
+target_link_libraries(
   logger-write
   smart-interface
   gyro-interface
-  ${CARMEN_BASE_LIB} 
-  ${CARMEN_ROBOT_LIB} 
-  ${CARMEN_LOCALIZE_LIB} 
-  ${CARMEN_SIMULATOR_LIB} 
-  ${CARMEN_GPS_LIB} 
-  ${CARMEN_LASER_LIB} 
+  ${CARMEN_BASE_LIB}
+  ${CARMEN_ROBOT_LIB}
+  ${CARMEN_LOCALIZE_LIB}
+  ${CARMEN_SIMULATOR_LIB}
+  ${CARMEN_GPS_LIB}
+  ${CARMEN_LASER_LIB}
 )
 
 sm_cpp_install( logger-write )
@@ -130,9 +125,9 @@ file( GLOB LOGGER_SRC logger/*.c logger/*.cpp )
 
 add_executable( elroblogger ${LOGGER_SRC} )
 
-target_link_libraries( 
+target_link_libraries(
   elroblogger
   m
   logger-write
-  ${CARMEN_PARAM_LIB} 
+  ${CARMEN_PARAM_LIB}
 )

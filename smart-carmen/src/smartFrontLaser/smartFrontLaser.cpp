@@ -28,7 +28,7 @@ void initializeRotor( Registry & registry )
 
 //------------------------------------------------------------------------------
 
-int main( int argc, char * argv[] )
+int main()
 {
   BaseOptions options;
   options.setInt( "elrob_carmen", "loggingLevel", 3 );
@@ -38,7 +38,6 @@ int main( int argc, char * argv[] )
   char host[100];
   strcpy( host, hostName().c_str() );
 
-  carmen_localize_globalpos_message global;
   carmen_base_odometry_message  odometry;
   Structure sLaser     = registry.newStructure( "carmen_robot_laser_message" );
   sLaser["host"]       = host;
