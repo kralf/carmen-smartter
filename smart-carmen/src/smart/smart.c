@@ -73,8 +73,8 @@ double control_max_steering = 0.436319;
 int control_velocity_enable = 0;
 double control_max_tv = 5.0;
 double control_max_rv = 0.5;
-int control_min_acceleration = -1.0;
-int control_max_acceleration = 1.0;
+double control_min_acceleration = -1.0;
+double control_max_acceleration = 1.0;
 
 double tv = 0.0;
 double steering_angle = 0.0;
