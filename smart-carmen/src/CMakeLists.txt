@@ -5,7 +5,7 @@
 find_library( SMART_LIB smart )
 find_library( DSP3000_LIB dsp3000 )
 
-find_library( IPC_LIB ipc )
+find_library( IPC_LIB carmen-ipc )
 find_library( Z_LIB z )
 
 find_library( CARMEN_GLOBAL_LIB carmen-global )
