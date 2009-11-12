@@ -357,8 +357,8 @@ void smart_integrate_odometry(double update_freq) {
     !smart.wheelspeed.rear_left_not_plausible) {
     odometry_tv = sign*wheel_circum*0.5*(smart.wheelspeed.rear_right+
       smart.wheelspeed.rear_left);
-    odometry_rv = sign*wheel_circum/wheel_base*(smart.wheelspeed.rear_left-
-      smart.wheelspeed.rear_right);
+    odometry_rv = sign*wheel_circum/wheel_base*(smart.wheelspeed.rear_right-
+      smart.wheelspeed.rear_left);
   }
   else {
     odometry_tv = 0.0;
