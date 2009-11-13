@@ -41,10 +41,10 @@ int locfilter_ipc_initialize(int argc, char *argv[]) {
   carmen_test_ipc_exit(err, "Could not define message",
     LOCFILTER_FILTEREDPOS_MESSAGE_NAME);
 
-  err = IPC_defineMsg(LOCFILTER_INIT_MESSAGE_NAME, IPC_VARIABLE_LENGTH,
-    LOCFILTER_INIT_MESSAGE_FMT);
+  err = IPC_defineMsg(LOCFILTER_INIT_FILTEREDPOS_MESSAGE_NAME,
+    IPC_VARIABLE_LENGTH, LOCFILTER_INIT_FILTEREDPOS_MESSAGE_FMT);
   carmen_test_ipc_exit(err, "Could not define message",
-    LOCFILTER_INIT_MESSAGE_NAME);
+    LOCFILTER_INIT_FILTEREDPOS_MESSAGE_NAME);
 
   return 0;
 }
@@ -65,16 +65,17 @@ void locfilter_publish_filteredpos(carmen_point_p filteredpos, carmen_point_p
     LOCFILTER_FILTEREDPOS_MESSAGE_NAME);
 }
 
-void locfilter_publish_init(carmen_point_p initpos, double timestamp) {
-  locfilter_init_message msg;
+void locfilter_publish_init_filteredpos(carmen_point_p filteredpos,
+  double timestamp) {
+  locfilter_init_filteredpos_message msg;
   IPC_RETURN_TYPE err;
 
-  msg.initpos = *initpos;
+  msg.filteredpos = *filteredpos;
 
   msg.timestamp = timestamp;
   msg.host = carmen_get_host();
 
-  err = IPC_publishData(LOCFILTER_INIT_MESSAGE_NAME, &msg);
+  err = IPC_publishData(LOCFILTER_INIT_FILTEREDPOS_MESSAGE_NAME, &msg);
   carmen_test_ipc_exit(err, "Could not publish",
-    LOCFILTER_INIT_MESSAGE_NAME);
+    LOCFILTER_INIT_FILTEREDPOS_MESSAGE_NAME);
 }

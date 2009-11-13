@@ -13,13 +13,14 @@ void locfilter_unsubscribe_filteredpos_message(carmen_handler_t handler) {
   carmen_unsubscribe_message(LOCFILTER_FILTEREDPOS_MESSAGE_NAME, handler);
 }
 
-void locfilter_subscribe_init_message(locfilter_init_message* msg,
-  carmen_handler_t handler, carmen_subscribe_t subscribe_how) {
-  carmen_subscribe_message(LOCFILTER_INIT_MESSAGE_NAME,
-    LOCFILTER_INIT_MESSAGE_FMT, msg, sizeof(locfilter_init_message), handler,
-    subscribe_how);
+void locfilter_subscribe_init_filteredpos_message(
+  locfilter_init_filteredpos_message* msg, carmen_handler_t handler,
+  carmen_subscribe_t subscribe_how) {
+  carmen_subscribe_message(LOCFILTER_INIT_FILTEREDPOS_MESSAGE_NAME,
+    LOCFILTER_INIT_FILTEREDPOS_MESSAGE_FMT, msg,
+    sizeof(locfilter_init_filteredpos_message), handler, subscribe_how);
 }
 
-void locfilter_unsubscribe_init_message(carmen_handler_t handler) {
-  carmen_unsubscribe_message(LOCFILTER_INIT_MESSAGE_NAME, handler);
+void locfilter_unsubscribe_init_filteredpos_message(carmen_handler_t handler) {
+  carmen_unsubscribe_message(LOCFILTER_INIT_FILTEREDPOS_MESSAGE_NAME, handler);
 }

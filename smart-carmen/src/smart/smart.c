@@ -86,6 +86,7 @@ double odometry_tv = 0.0;
 double odometry_rv = 0.0;
 double odometry_acceleration = 0.0;
 
+smart_init_odometrypos_message init;
 smart_velocity_message smart_velocity;
 carmen_base_velocity_message base_velocity;
 
@@ -383,6 +384,13 @@ void smart_control_cycle(double tv, double steering_angle, double update_time,
     smart_control_steering(steering_angle, update_freq);
 }
 
+void smart_init_odometrypos_handler(smart_init_odometrypos_message*
+  init) {
+  odometry_x = init->odometrypos.x;
+  odometry_y = init->odometrypos.y;
+  odometry_theta = init->odometrypos.theta;
+}
+
 void smart_velocity_handler(smart_velocity_message* velocity) {
   tv = (velocity->tv > control_max_tv) ? control_max_tv : velocity->tv;
 
@@ -411,6 +419,11 @@ int main(int argc, char *argv[]) {
   smart_ipc_initialize(argc, argv);
   smart_read_parameters(argc, argv);
 
+  if ((argc > 1) && !strcmp(argv[1], "--no-control")) {
+    control_steering_enable = 0;
+    control_velocity_enable = 0;
+  }
+
   if (smart_open())
     carmen_die("ERROR: Smart initialization failed\n");
   if (control_velocity_enable && smart_brake_calibrate())
@@ -420,6 +433,10 @@ int main(int argc, char *argv[]) {
     carmen_die("ERROR: Emergency stop activation failed\n");
 
   smart_control_init();
+
+  smart_subscribe_init_odometrypos_message(&init,
+    (carmen_handler_t)smart_init_odometrypos_handler,
+    CARMEN_SUBSCRIBE_LATEST);
 
   smart_subscribe_velocity_message(&smart_velocity,
     (carmen_handler_t)smart_velocity_handler, CARMEN_SUBSCRIBE_LATEST);

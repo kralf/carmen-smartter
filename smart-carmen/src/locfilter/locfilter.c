@@ -40,7 +40,7 @@
 
 int quit = 0;
 
-locfilter_init_message init;
+locfilter_init_filteredpos_message init;
 carmen_base_odometry_message odometry;
 gyro_integrated_message gyro;
 
@@ -116,10 +116,11 @@ void locfilter_update(double update_freq) {
     locfilter_initialize();
 }
 
-void locfilter_init_handler(locfilter_init_message* init) {
-  filtered_x = init->initpos.x;
-  filtered_y = init->initpos.y;
-  filtered_theta = init->initpos.theta;
+void locfilter_init_filteredpos_handler(locfilter_init_filteredpos_message*
+  init) {
+  filtered_x = init->filteredpos.x;
+  filtered_y = init->filteredpos.y;
+  filtered_theta = init->filteredpos.theta;
 }
 
 void locfilter_odometry_handler(carmen_base_odometry_message* odometry) {
@@ -140,8 +141,9 @@ int main(int argc, char *argv[]) {
   odometry.timestamp = 0.0;
   gyro.timestamp = 0.0;
 
-  locfilter_subscribe_init_message(&init,
-    (carmen_handler_t)locfilter_init_handler, CARMEN_SUBSCRIBE_LATEST);
+  locfilter_subscribe_init_filteredpos_message(&init,
+    (carmen_handler_t)locfilter_init_filteredpos_handler,
+    CARMEN_SUBSCRIBE_LATEST);
 
   carmen_base_subscribe_odometry_message(&odometry,
     (carmen_handler_t)locfilter_odometry_handler, CARMEN_SUBSCRIBE_LATEST);

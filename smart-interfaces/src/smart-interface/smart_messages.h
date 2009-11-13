@@ -26,9 +26,15 @@ typedef struct {
   char* host;
 } smart_status_message;
 
-#ifdef __cplusplus
-}
-#endif
+#define SMART_INIT_ODOMETRYPOS_MESSAGE_NAME "smart_init_odometrypos_message"
+#define SMART_INIT_ODOMETRYPOS_MESSAGE_FMT "{{double,double,double},double,string}"
+
+typedef struct {
+  carmen_point_t odometrypos;
+
+  double timestamp;
+  char *host;
+} smart_init_odometrypos_message;
 
 #define SMART_VELOCITY_MESSAGE_NAME "smart_velocity_message"
 #define SMART_VELOCITY_MESSAGE_FMT "{double,double,double,string}"
