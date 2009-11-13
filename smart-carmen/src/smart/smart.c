@@ -76,8 +76,12 @@ double control_max_rv = 0.5;
 double control_min_acceleration = -1.0;
 double control_max_acceleration = 1.0;
 
+double control_timeout_motion_command = 0.0;
+
 double tv = 0.0;
 double steering_angle = 0.0;
+
+double last_motion_command = 0.0;
 
 double odometry_x = 0.0;
 double odometry_y = 0.0;
@@ -135,6 +139,9 @@ int smart_read_parameters(int argc, char **argv) {
       &control_min_acceleration, 0, NULL},
     {"smart", "control_max_acceleration", CARMEN_PARAM_DOUBLE,
       &control_max_acceleration, 0, NULL},
+
+    {"smart", "control_timeout_motion_command", CARMEN_PARAM_DOUBLE,
+      &control_timeout_motion_command, 0, NULL},
   };
 
   num_params = sizeof(params)/sizeof(carmen_param_t);
@@ -399,6 +406,8 @@ void smart_velocity_handler(smart_velocity_message* velocity) {
     control_max_steering : steering_angle;
   steering_angle = (steering_angle < -control_max_steering) ?
     -control_max_steering : steering_angle;
+
+  last_motion_command = carmen_get_time();
 }
 
 void base_velocity_handler(carmen_base_velocity_message* velocity) {
@@ -413,6 +422,8 @@ void base_velocity_handler(carmen_base_velocity_message* velocity) {
     control_max_steering : steering_angle;
   steering_angle = (steering_angle < -control_max_steering) ?
     -control_max_steering : steering_angle;
+
+  last_motion_command = carmen_get_time();
 }
 
 int main(int argc, char *argv[]) {
@@ -454,6 +465,11 @@ int main(int argc, char *argv[]) {
     double update_freq = (cycle_start > 0.0) ? 1.0/(now-cycle_start) : 0.0;
     interval_start = (interval_start > 0.0) ? interval_start : now;
     cycle_start = now;
+
+    if (now - last_motion_command > control_timeout_motion_command) {
+      tv             = 0.0;
+      steering_angle = 0.0;
+    }
 
     double update_start = carmen_get_time();
     if (smart_sensor_update()) {
