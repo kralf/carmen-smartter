@@ -168,7 +168,7 @@ int main(int argc, char **argv) {
         send_smart_velocity_command(cmd_tv, cmd_steering);
       }
     }
-    else if (joystick_activated && carmen_get_time()-timestamp > 0.5) {
+    else if (joystick_activated && carmen_get_time()-timestamp > 0.01) {
       send_smart_velocity_command(cmd_tv, cmd_steering);
       timestamp = carmen_get_time();
     }
