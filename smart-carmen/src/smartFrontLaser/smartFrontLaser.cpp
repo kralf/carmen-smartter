@@ -75,7 +75,7 @@ int main()
           laser.tooclose[i] = 0;
         }
         for ( size_t i = 0; i < data.num_points; ++i ) {
-          if ( data.channel[i] == 2 ) {
+          if ( ( data.channel[i] == 2 ) && ( !data.point_status[i] ) ) {
             size_t index = int( ( atan2( data.y[i], data.x[i] ) + M_PI / 2.0 ) * (rayCount - 1 ) / M_PI );
             double r = sqrt( pow( data.x[i], 2 ) + pow( data.y[i], 2 ) );
             if ( r < laser.range[index] ) {
