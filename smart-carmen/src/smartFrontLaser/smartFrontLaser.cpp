@@ -14,31 +14,57 @@ using namespace std;
 
 //------------------------------------------------------------------------------
 
-void initializeRotor( Registry & registry )
+void initializeRotor( Registry & registry, const string & poseMessage )
 {
   registry.registerType( ROTOR_DEFINITION_STRING( carmen_point_t ) );
-  registry.registerMessageType( "carmen_base_odometry", ROTOR_DEFINITION_STRING( carmen_base_odometry_message ) );
-  registry.subscribeToMessage( "carmen_base_odometry" );
-  registry.registerMessageType( "axt_message", ROTOR_DEFINITION_STRING( axt_message ) );
+
+  registry.registerMessageType(
+    "carmen_base_odometry_message",
+    ROTOR_DEFINITION_STRING( carmen_base_odometry_message )
+  );
+  registry.subscribeToMessage( "carmen_base_odometry_message", true );
+
+  if ( poseMessage == "locfilter_filteredpos_message" )
+  {
+    registry.registerMessageType(
+      "locfilter_filteredpos_message",
+      ROTOR_DEFINITION_STRING( locfilter_filteredpos_message )
+    );
+    registry.subscribeToMessage( "locfilter_filteredpos_message", true );
+  }
+
+  registry.registerMessageType(
+    "axt_message",
+    ROTOR_DEFINITION_STRING( axt_message )
+  );
   registry.subscribeToMessage( "axt_message" );
 
   registry.registerType( ROTOR_DEFINITION_STRING( carmen_laser_laser_config_t ) );
-  registry.registerMessageType( "carmen_robot_frontlaser", ROTOR_DEFINITION_STRING( carmen_robot_laser_message ) );
+  registry.registerMessageType(
+    "carmen_robot_frontlaser",
+    ROTOR_DEFINITION_STRING( carmen_robot_laser_message )
+  );
 }
 
 //------------------------------------------------------------------------------
 
-int main()
+int main( int argc, char * argv[] )
 {
+  string moduleName( argv[0] );
+
   BaseOptions options;
-  options.setInt( "elrob_carmen", "loggingLevel", 3 );
-  RemoteRegistry registry( "CarmenRegistry", "elrob_carmen", options, "lib" );
-  initializeRotor( registry );
+  RemoteRegistry registry( "CarmenRegistry", moduleName, options, "lib" );
+  string poseMessage = options.getString( moduleName, "poseMessage" );
+
+  initializeRotor( registry, poseMessage );
 
   char host[100];
   strcpy( host, hostName().c_str() );
 
-  carmen_base_odometry_message  odometry;
+  carmen_point_t pose = { 0, 0, 0 };
+  double tv = 0;
+  double rv = 0;
+
   Structure sLaser     = registry.newStructure( "carmen_robot_laser_message" );
   sLaser["host"]       = host;
 
@@ -49,8 +75,12 @@ int main()
       Message msg       = registry.receiveMessage( 0.5 );
       Structure & sData = msg.data();
       if ( msg.name() == "carmen_base_odometry" ) {
-        Logger::spam( "Got localization message" );
-        odometry = * reinterpret_cast<carmen_base_odometry_message *>( sData.buffer() );
+        Logger::spam( "Got pose message" );
+        tv = sData["tv"];
+        rv = sData["rv"];
+      } else if ( msg.name() == "locfilter_filteredpos_message" ) {
+        Logger::spam( "Got pose message" );
+        pose = ROTOR_VARIABLE( carmen_point_t, sData["filteredpos"] );
       } else if ( msg.name() == "axt_message" ) {
         Logger::spam( "Got alasca message" );
         axt_message & data     = * reinterpret_cast<axt_message*>( sData.buffer() );
@@ -69,7 +99,6 @@ int main()
         laser.config.accuracy           = 0.1;
         laser.config.remission_mode     = 0;
 
-
         for ( size_t i = 0; i < rayCount; ++i ) {
           laser.range[i]    = laser.config.maximum_range * 2.0;
           laser.tooclose[i] = 0;
@@ -84,16 +113,16 @@ int main()
           }
         }
 
-        laser.laser_pose.theta = odometry.theta;
-        laser.laser_pose.x     = odometry.x + laserDistance * cos( -laser.laser_pose.theta );
-        laser.laser_pose.y     = odometry.y + laserDistance * sin( -laser.laser_pose.theta );
+        laser.laser_pose.theta = pose.theta;
+        laser.laser_pose.x     = pose.x + laserDistance * cos( -laser.laser_pose.theta );
+        laser.laser_pose.y     = pose.y + laserDistance * sin( -laser.laser_pose.theta );
 
-        laser.robot_pose.theta = odometry.theta;
-        laser.robot_pose.x     = odometry.x;
-        laser.robot_pose.y     = odometry.y;
+        laser.robot_pose.theta = pose.theta;
+        laser.robot_pose.x     = pose.x;
+        laser.robot_pose.y     = pose.y;
 
-        laser.tv               = odometry.tv;
-        laser.rv               = odometry.rv;
+        laser.tv               = tv;
+        laser.rv               = rv;
         laser.turn_axis        = 2;
 
         laser.timestamp    = seconds();

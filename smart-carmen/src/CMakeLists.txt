@@ -121,21 +121,6 @@ target_link_libraries(
 sm_cpp_install( smartFrontLaser )
 
 #-------------------------------------------------------------------------------
-# elrobLocalize
-#-------------------------------------------------------------------------------
-
-file( GLOB SMART_LOCALIZE_SRC smartLocalize/*.cpp )
-
-add_executable( smartLocalize ${SMART_LOCALIZE_SRC} )
-
-target_link_libraries(
-  smartLocalize
-  ${ROTOR_LIB}
-)
-
-sm_cpp_install( smartLocalize )
-
-#-------------------------------------------------------------------------------
 # joysmartCarmen
 #-------------------------------------------------------------------------------
 
