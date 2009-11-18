@@ -2,6 +2,7 @@
 #include <rotor/RemoteRegistry.h>
 #include <rotor/BaseOptions.h>
 #include <rotor/NetUtils.h>
+#include <rotor/FileUtils.h>
 #include <rotor/Conversion.h>
 #include <rotor/Logger.h>
 #include <rotor/Time.h>
@@ -50,9 +51,16 @@ void initializeRotor( Registry & registry, const string & poseMessage )
 
 int main( int argc, char * argv[] )
 {
+  if ( argc < 2 )
+  {
+    cout << "Usage: " << argv[0] << " <config.ini>\n";
+    exit( 1 );
+  }
+
   string moduleName( argv[0] );
 
   BaseOptions options;
+  options.fromString( fileContents( argv[1] ) );
   RemoteRegistry registry( "CarmenRegistry", moduleName, options, "lib" );
   string poseMessage = options.getString( moduleName, "poseMessage" );
 
@@ -76,6 +84,9 @@ int main( int argc, char * argv[] )
       Structure & sData = msg.data();
       if ( msg.name() == "carmen_base_odometry" ) {
         Logger::spam( "Got pose message" );
+        pose.x = sData["x"];
+        pose.y = sData["y"];
+        pose.theta = sData["theta"];
         tv = sData["tv"];
         rv = sData["rv"];
       } else if ( msg.name() == "locfilter_filteredpos_message" ) {
