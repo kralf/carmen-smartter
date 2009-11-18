@@ -63,6 +63,7 @@ int main( int argc, char * argv[] )
   options.fromString( fileContents( argv[1] ) );
   RemoteRegistry registry( "CarmenRegistry", moduleName, options, "lib" );
   string poseMessage = options.getString( moduleName, "poseMessage" );
+  int alascaChannel = options.getInt( moduleName, "alascaChannel" );
 
   initializeRotor( registry, poseMessage );
 
@@ -117,7 +118,8 @@ int main( int argc, char * argv[] )
           laser.tooclose[i] = 0;
         }
         for ( size_t i = 0; i < data.num_points; ++i ) {
-          if ( ( data.channel[i] == 2 ) && ( !data.point_status[i] ) ) {
+          if ( ( ( alascaChannel < 0 ) || ( data.channel[i] == alascaChannel ) )
+              && ( !data.point_status[i] ) ) {
             size_t index = int( ( atan2( data.y[i], data.x[i] ) + M_PI / 2.0 ) * (rayCount - 1 ) / M_PI );
             double r = sqrt( pow( data.x[i], 2 ) + pow( data.y[i], 2 ) );
             if ( r < laser.range[index] ) {
