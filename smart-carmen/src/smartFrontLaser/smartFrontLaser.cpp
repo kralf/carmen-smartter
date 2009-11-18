@@ -20,10 +20,10 @@ void initializeRotor( Registry & registry, const string & poseMessage )
   registry.registerType( ROTOR_DEFINITION_STRING( carmen_point_t ) );
 
   registry.registerMessageType(
-    "carmen_base_odometry_message",
+    "carmen_base_odometry",
     ROTOR_DEFINITION_STRING( carmen_base_odometry_message )
   );
-  registry.subscribeToMessage( "carmen_base_odometry_message", true );
+  registry.subscribeToMessage( "carmen_base_odometry", true );
 
   if ( poseMessage == "locfilter_filteredpos_message" )
   {
@@ -125,8 +125,8 @@ int main( int argc, char * argv[] )
         }
 
         laser.laser_pose.theta = pose.theta;
-        laser.laser_pose.x     = pose.x + laserDistance * cos( -laser.laser_pose.theta );
-        laser.laser_pose.y     = pose.y + laserDistance * sin( -laser.laser_pose.theta );
+        laser.laser_pose.x     = pose.x + laserDistance * cos( laser.laser_pose.theta );
+        laser.laser_pose.y     = pose.y + laserDistance * sin( laser.laser_pose.theta );
 
         laser.robot_pose.theta = pose.theta;
         laser.robot_pose.x     = pose.x;
