@@ -108,7 +108,8 @@ void locfilter_update(double update_freq) {
     carmen_point_t odometrypos = {odometry.x, odometry.y, odometry.theta};
     double timestamp = max(odometry.timestamp, gyro.timestamp);
 
-    locfilter_publish_filteredpos(&filteredpos, &odometrypos, timestamp);
+    locfilter_publish_filteredpos(&filteredpos, &odometrypos, odometry.tv,
+      odometry.rv, timestamp);
 
     num_updates++;
   }

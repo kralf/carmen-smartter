@@ -50,12 +50,15 @@ int locfilter_ipc_initialize(int argc, char *argv[]) {
 }
 
 void locfilter_publish_filteredpos(carmen_point_p filteredpos, carmen_point_p
-  odometrypos, double timestamp) {
+  odometrypos, double tv, double rv, double timestamp) {
   locfilter_filteredpos_message msg;
   IPC_RETURN_TYPE err;
 
   msg.filteredpos = *filteredpos;
   msg.odometrypos = *odometrypos;
+
+  msg.tv = tv;
+  msg.rv = rv;
 
   msg.timestamp = timestamp;
   msg.host = carmen_get_host();

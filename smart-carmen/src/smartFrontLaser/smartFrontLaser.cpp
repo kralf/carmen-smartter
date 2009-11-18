@@ -19,14 +19,14 @@ void initializeRotor( Registry & registry, const string & poseMessage )
 {
   registry.registerType( ROTOR_DEFINITION_STRING( carmen_point_t ) );
 
-  registry.registerMessageType(
-    "carmen_base_odometry",
-    ROTOR_DEFINITION_STRING( carmen_base_odometry_message )
-  );
-  registry.subscribeToMessage( "carmen_base_odometry", true );
-
-  if ( poseMessage == "locfilter_filteredpos_message" )
+  if ( poseMessage == "carmen_base_odometry" )
   {
+    registry.registerMessageType(
+      "carmen_base_odometry",
+      ROTOR_DEFINITION_STRING( carmen_base_odometry_message )
+    );
+    registry.subscribeToMessage( "carmen_base_odometry", true );
+  } else if ( poseMessage == "locfilter_filteredpos_message" ) {
     registry.registerMessageType(
       "locfilter_filteredpos_message",
       ROTOR_DEFINITION_STRING( locfilter_filteredpos_message )
@@ -92,6 +92,8 @@ int main( int argc, char * argv[] )
       } else if ( msg.name() == "locfilter_filteredpos_message" ) {
         Logger::spam( "Got pose message" );
         pose = ROTOR_VARIABLE( carmen_point_t, sData["filteredpos"] );
+        tv = sData["tv"];
+        rv = sData["rv"];
       } else if ( msg.name() == "axt_message" ) {
         Logger::spam( "Got alasca message" );
         axt_message & data     = * reinterpret_cast<axt_message*>( sData.buffer() );

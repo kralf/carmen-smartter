@@ -48,7 +48,7 @@ extern "C" {
 int locfilter_ipc_initialize(int argc, char *argv[]);
 
 void locfilter_publish_filteredpos(carmen_point_p filteredpos, carmen_point_p
-  odometrypos, double timestamp);
+  odometrypos, double tv, double rv, double timestamp);
 
 void locfilter_publish_init_filteredpos(carmen_point_p filteredpos,
   double timestamp);
