@@ -40,9 +40,13 @@ int quit = 0;
 char* serial_dev;
 
 int inverse = 0;
+int hw_integrate = 0;
 
 unsigned long measurement_id = 0;
 double integrated_theta = 0.0;
+
+int integrated_init = 0;
+double integrated_offset = 0.0;
 
 DSP3000_Data dsp3000;
 
@@ -64,6 +68,7 @@ int gyro_read_parameters(int argc, char **argv) {
   carmen_param_t params[] = {
     {"gyro", "serial_dev", CARMEN_PARAM_STRING, &serial_dev, 0, NULL},
 
+    {"gyro", "hw_integrate", CARMEN_PARAM_ONOFF, &hw_integrate, 0, NULL},
     {"gyro", "inverse", CARMEN_PARAM_ONOFF, &inverse, 0, NULL},
   };
 
@@ -77,8 +82,11 @@ int gyro_open() {
   int result = -1;
   fprintf(stderr, "Opening gyro RS232 connection... ");
 
+  integrated_init = 0;
+  
   if (DSP3000_OpenPort(serial_dev, GYRO_CONNECTION_TIMEOUT*1e3) > 0)
-    result = !DSP3000_SwitchMode(MODULE_NAME_DSP3000_INC);
+    result = !DSP3000_SwitchMode(hw_integrate ? MODULE_NAME_DSP3000_INT :
+      MODULE_NAME_DSP3000_INC);
 
   fprintf(stderr, result ? "failure\n" : "success\n");
   return result;
@@ -99,15 +107,32 @@ int gyro_capture() {
   TIMEVAL time;
 
   if (DSP3000_ParseStream(buffer, DSP_SIZE_BUFF, &time))
-    return DSP3000_FillContainer(buffer, &time, MODULE_NAME_DSP3000_INC,
+    return DSP3000_FillContainer(buffer, &time, hw_integrate ?
+      MODULE_NAME_DSP3000_INT : MODULE_NAME_DSP3000_INC,
       measurement_id++, &dsp3000);
 }
 
 void gyro_integrate_theta() {
-  if (inverse)
-    integrated_theta = gyro_theta_mod_2pi(integrated_theta-dsp3000.data);
-  else
-    integrated_theta = gyro_theta_mod_2pi(integrated_theta+dsp3000.data);
+  if (hw_integrate) {
+    if (integrated_init) {
+      if (inverse)
+        integrated_theta = gyro_theta_mod_2pi(integrated_offset-dsp3000.data);
+      else
+        integrated_theta = gyro_theta_mod_2pi(dsp3000.data-integrated_offset);
+    }
+    else {
+      integrated_theta = 0.0;
+      integrated_offset = gyro_theta_mod_2pi(dsp3000.data);
+      
+      integrated_init = 1;
+    }
+  }
+  else {
+    if (inverse)
+      integrated_theta = gyro_theta_mod_2pi(integrated_theta-dsp3000.data);
+    else
+      integrated_theta = gyro_theta_mod_2pi(integrated_theta+dsp3000.data);
+  }
 }
 
 int main(int argc, char *argv[]) {
