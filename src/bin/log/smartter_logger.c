@@ -28,9 +28,19 @@
 
 #include <carmen/carmen.h>
 
-#include <logger-write/writelog.h>
+#include "writelog.h"
 
-#include "logger.h"
+#define          ODOM_ID                          0
+#define          FRONTLASER_ID                    1
+#define          ROBOT_FRONTLASER_ID              2
+#define          POSITION_ID                      3
+#define          ROBOT_OLD_FRONTLASER_ID          4
+#define          REARLASER_ID                     5
+#define          ROBOT_REARLASER_ID               6
+#define          ROBOT_OLD_REARLASER_ID           7
+#define          SYNC_ID                          8
+#define          PARAM_ID                         9
+#define          VERSION_ID                      10
 
 carmen_FILE *outfile = NULL;
 double logger_starttime;

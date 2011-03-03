@@ -28,7 +28,7 @@
 
 #include <carmen/carmen.h>
 
-#include <dsp3000/libdsp3000.h>
+#include <libdsp3000/dsp3000.h>
 
 #include "gyro_ipc.h"
 

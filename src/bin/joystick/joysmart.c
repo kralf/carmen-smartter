@@ -19,10 +19,9 @@
  ***************************************************************************/
 
 #include <carmen/carmen.h>
+#include <carmen/joyctrl.h>
 
-#include <smart-interface/smart_messages.h>
-
-#include "joyctrl.h"
+#include "smart_messages.h"
 
 char* joystick_dev;
 int joystick_axis_long;
@@ -114,7 +113,7 @@ int main(int argc, char **argv) {
 
   fprintf(stderr,"Looking for joystick at device: %s\n", joystick_dev);
 
-  if (carmen_initialize_joystick(&joystick, joystick_dev) < 0)
+  if (carmen_initialize_joystick_device(&joystick, joystick_dev) < 0)
     carmen_die("Error: could not find joystick at device: %s\n", joystick_dev);
   else
     fprintf(stderr,"Joystick has %d axes and %d buttons\n\n",

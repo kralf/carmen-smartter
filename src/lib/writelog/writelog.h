@@ -43,8 +43,8 @@
 #include <carmen/carmen.h>
 #include <carmen/carmen_stdio.h>
 
-#include <smart-interface/smart_messages.h>
-#include <gyro-interface/gyro_messages.h>
+#include "smart_messages.h"
+#include "gyro_messages.h"
 
 #define CARMEN_LOGFILE_HEADER "# CARMEN Logfile"
 

@@ -26,29 +26,37 @@
  *
  ********************************************************/
 
-#ifndef ELROB_LOGGER_H
-#define ELROB_LOGGER_H
+/** @addtogroup axt **/
+// @{
+
+/** \file axt_ipc.h
+  * \brief Definition of the communication of this module.
+  *
+  * This file specifies the interface to publish messages of that module
+  * via ipc.
+  **/
+
+#ifndef CARMEN_AXT_IPC_H
+#define CARMEN_AXT_IPC_H
+
+#include "axt_messages.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#define          ODOM_ID                          0
-#define          FRONTLASER_ID                    1
-#define          ROBOT_FRONTLASER_ID              2
-#define          POSITION_ID                      3
-#define          ROBOT_OLD_FRONTLASER_ID          4
-#define          REARLASER_ID                     5
-#define          ROBOT_REARLASER_ID               6
-#define          ROBOT_OLD_REARLASER_ID           7
-#define          SYNC_ID                          8
-#define          PARAM_ID                         9
-#define          VERSION_ID                      10
+int axt_ipc_initialize(int argc, char *argv[]);
 
+void axt_publish(unsigned int version, unsigned int scanner_type, unsigned int
+  ecu_id, double start_angle, double end_angle, unsigned int scan_counter,
+  unsigned int timestamp_sensor, unsigned int num_points, float* x, float* y,
+  float* z, unsigned char* channel, unsigned char* point_status, double
+  timestamp);
 
 #ifdef __cplusplus
 }
 #endif
 
-
 #endif
+
+// @}

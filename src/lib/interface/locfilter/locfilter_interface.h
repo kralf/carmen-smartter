@@ -1,6 +1,8 @@
 #ifndef LOCFILTER_INTERFACE_H
 #define LOCFILTER_INTERFACE_H
 
+#include <carmen/global.h>
+
 #include "locfilter_messages.h"
 
 #ifdef __cplusplus

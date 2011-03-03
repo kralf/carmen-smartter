@@ -1,5 +1,3 @@
-#include <carmen/carmen.h>
-
 #include "smart_interface.h"
 
 void smart_subscribe_status_message(smart_status_message* msg,

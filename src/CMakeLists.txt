@@ -7,18 +7,16 @@ remake_find_library(
   PACKAGE CARMEN
 )
 remake_find_library(
-  tulibs-thread thread.h
-  PACKAGE tulibs
+  carmen-base_interface base_interface.h
+  PACKAGE CARMEN
 )
 remake_find_library(
-  era era.h
-  PACKAGE era-libs
+  smartter libsmartter/smart.h
+  PACKAGE libsmartter
 )
 
 remake_define(REDHAT_52 ON)
 remake_define(REDHAT_6 ON)
 remake_define(REDHAT_71 ON)
-
-remake_include(${ERA_HEADERS})
 
 remake_add_directories()

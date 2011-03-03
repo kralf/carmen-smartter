@@ -1,6 +1,8 @@
 #ifndef GYRO_INTERFACE_H
 #define GYRO_INTERFACE_H
 
+#include <carmen/global.h>
+
 #include "gyro_messages.h"
 
 #ifdef __cplusplus

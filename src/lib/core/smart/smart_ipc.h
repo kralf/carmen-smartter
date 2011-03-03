@@ -39,9 +39,9 @@
 #ifndef CARMEN_SMART_IPC_H
 #define CARMEN_SMART_IPC_H
 
-#include <smart/smartStruct.h>
+#include <libsmartter/smart.h>
 
-#include <smart-interface/smart_messages.h>
+#include "smart_messages.h"
 
 #ifdef __cplusplus
 extern "C" {

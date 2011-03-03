@@ -1,6 +1,8 @@
 #ifndef SMART_INTERFACE_H
 #define SMART_INTERFACE_H
 
+#include <carmen/global.h>
+
 #include "smart_messages.h"
 
 #ifdef __cplusplus

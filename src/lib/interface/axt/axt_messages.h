@@ -6,7 +6,7 @@ extern "C" {
 #endif
 
 #define AXT_MESSAGE_NAME "axt_message"
-#define AXT_MESSAGE_FMT "{uint,uint,uint,uint,uint,double,double,uint,<ubyte:1>,<ubyte:1>,<float:1>,<float:1>,<float:1>,double}"
+#define AXT_MESSAGE_FMT "{uint,uint,uint,uint,uint,double,double,uint,<ubyte:1>,<ubyte:1>,<float:1>,<float:1>,<float:1>,double,string}"
 
 typedef struct {
   unsigned int num_points;
@@ -26,6 +26,7 @@ typedef struct {
   float *z;
   
   double timestamp;
+  char* host;
 } axt_message;
 
 #ifdef __cplusplus

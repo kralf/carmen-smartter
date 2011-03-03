@@ -28,10 +28,10 @@
 
 #include <carmen/carmen.h>
 
-#include <smart/smartSmart.h>
-#include <smart/lss.h>
-#include <smart/cst.h>
-#include <smart/handlers.h>
+#include <libsmartter/smart.h>
+#include <libsmartter/lss.h>
+#include <libsmartter/cst.h>
+#include <libsmartter/handlers.h>
 
 #include "smart_ipc.h"
 

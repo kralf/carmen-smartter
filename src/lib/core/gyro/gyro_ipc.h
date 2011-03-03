@@ -39,7 +39,7 @@
 #ifndef CARMEN_GYRO_IPC_H
 #define CARMEN_GYRO_IPC_H
 
-#include <gyro-interface/gyro_messages.h>
+#include "gyro_messages.h"
 
 #ifdef __cplusplus
 extern "C" {

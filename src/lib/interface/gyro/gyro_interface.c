@@ -1,5 +1,3 @@
-#include <carmen/carmen.h>
-
 #include "gyro_interface.h"
 
 void gyro_subscribe_integrated_message(gyro_integrated_message* msg, 

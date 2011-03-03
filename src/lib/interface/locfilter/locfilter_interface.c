@@ -1,5 +1,3 @@
-#include <carmen/carmen.h>
-
 #include "locfilter_interface.h"
 
 void locfilter_subscribe_filteredpos_message(locfilter_filteredpos_message*

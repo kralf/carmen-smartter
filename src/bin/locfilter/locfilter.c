@@ -29,7 +29,7 @@
 #include <carmen/carmen.h>
 #include <carmen/base_interface.h>
 
-#include <gyro-interface/gyro_interface.h>
+#include "gyro_interface.h"
 
 #include "locfilter_ipc.h"
 

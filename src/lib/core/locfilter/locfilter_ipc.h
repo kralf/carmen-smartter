@@ -39,7 +39,7 @@
 #ifndef CARMEN_LOCFILTER_IPC_H
 #define CARMEN_LOCFILTER_IPC_H
 
-#include <locfilter-interface/locfilter_interface.h>
+#include "locfilter_interface.h"
 
 #ifdef __cplusplus
 extern "C" {
