@@ -16,6 +16,11 @@ remake_project(
   PREFIX carmen-
 )
 
+remake_add_directories(
+  data
+  COMPONENT data
+)
+
 remake_pack_deb(
   carmen libaxt libdsp3000 libsmartter
 )
@@ -23,4 +28,9 @@ remake_pack_deb(
   COMPONENT dev
   DESCRIPTION "development headers"
   carmen_smartter carmen-dev libaxt-dev libdsp3000-dev libsmartter-dev
+)
+remake_pack_deb(
+  ARCH all
+  COMPONENT data
+  DESCRIPTION "map data"
 )
