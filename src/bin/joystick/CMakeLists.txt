@@ -3,5 +3,5 @@ remake_find_library(
   PACKAGE CARMEN
 )
 
-remake_add_executables(LINK smart_interface ${CARMEN_PARAM_INTERFACE_LIBRARY}
-  ${CARMEN_JOYCTRL_LIBRARY})
+remake_add_executables(LINK smart_interface ${CARMEN_INTERFACE_LIBRARIES}
+  ${CARMEN_LIBRARIES})

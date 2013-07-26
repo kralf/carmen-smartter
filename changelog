@@ -1,46 +1,53 @@
-carmen-smartter (0.1-48) unstable; urgency=low
+carmen-smartter (0.1-46) unstable; urgency=low
+
+  * Added pkg-config file
+  * Release distributions
+
+ -- Ralf Kaestner <ralf.kaestner@gmail.com>  Fri, 26 Jul 2013 16:36:00 +0100
+
+carmen-smartter (0.1-45) unstable; urgency=low
 
   * Added changelog
 
  -- Ralf Kaestner <ralf.kaestner@gmail.com>  Fri, 26 Jul 2013 16:16:00 +0100
 
-carmen-smartter (0.1-47) unstable; urgency=low
+carmen-smartter (0.1-44) unstable; urgency=low
 
   * Fixed smart_logger entry in commander.conf
 
  -- Ralf Kaestner <ralf.kaestner@gmail.com>  Thu, 03 Mar 2011 15:39:17 +0100
 
-carmen-smartter (0.1-46) unstable; urgency=low
+carmen-smartter (0.1-43) unstable; urgency=low
 
   * Moved smartter_logger to smart_logger for name consistency
 
  -- Ralf Kaestner <ralf.kaestner@gmail.com>  Thu, 03 Mar 2011 15:38:39 +0100
 
-carmen-smartter (0.1-45) unstable; urgency=low
+carmen-smartter (0.1-42) unstable; urgency=low
 
   * Fixed spelling error in commander.conf
 
  -- Ralf Kaestner <ralf.kaestner@gmail.com>  Thu, 03 Mar 2011 15:21:57 +0100
 
-carmen-smartter (0.1-44) unstable; urgency=low
+carmen-smartter (0.1-41) unstable; urgency=low
 
   * Adapted executable naming in commander.conf
 
  -- Ralf Kaestner <ralf.kaestner@gmail.com>  Thu, 03 Mar 2011 14:24:04 +0100
 
-carmen-smartter (0.1-43) unstable; urgency=low
+carmen-smartter (0.1-40) unstable; urgency=low
 
   * Added map data of UPC campus and St. Joan area in Barcelona
 
  -- Ralf Kaestner <ralf.kaestner@gmail.com>  Thu, 03 Mar 2011 14:09:15 +0100
 
-carmen-smartter (0.1-42) unstable; urgency=low
+carmen-smartter (0.1-39) unstable; urgency=low
 
   * ReMake build system port and cleanups
 
  -- Ralf Kaestner <ralf.kaestner@gmail.com>  Thu, 03 Mar 2011 13:52:34 +0100
 
-carmen-smartter (0.1-41) unstable; urgency=low
+carmen-smartter (0.1-38) unstable; urgency=low
 
   * Cleanup commit
 

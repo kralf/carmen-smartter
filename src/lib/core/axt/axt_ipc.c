@@ -26,7 +26,7 @@
  *
  ********************************************************/
 
-#include <carmen/carmen.h>
+#include <carmen/global.h>
 
 #include "axt_ipc.h"
 

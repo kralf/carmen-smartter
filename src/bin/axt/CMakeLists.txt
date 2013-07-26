@@ -1,4 +1,6 @@
-remake_find_library(axt libaxt/axt.h PACKAGE libaxt)
+remake_find_package(libaxt CONFIG)
 
-remake_add_executables(LINK axt_interface axt_core
-  ${CARMEN_PARAM_INTERFACE_LIBRARY} ${AXT_LIBRARY})
+remake_add_executable(carmen-axt axt.c PREFIX OFF
+  LINK axt_interface axt_core ${CARMEN_INTERFACE_LIBRARIES}
+    ${LIBAXT_LIBRARIES}
+)

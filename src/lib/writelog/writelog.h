@@ -40,7 +40,7 @@
 #ifndef ELROB_LOGWRITE_H
 #define ELROB_LOGWRITE_H
 
-#include <carmen/carmen.h>
+#include <carmen/global.h>
 #include <carmen/carmen_stdio.h>
 
 #include "smart_messages.h"

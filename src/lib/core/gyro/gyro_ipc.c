@@ -26,7 +26,7 @@
  *
  ********************************************************/
 
-#include <carmen/carmen.h>
+#include <carmen/global.h>
 
 #include "gyro_ipc.h"
 
