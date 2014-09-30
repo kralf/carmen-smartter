@@ -1,8 +1,14 @@
+carmen-smartter (0.1-49) unstable; urgency=low
+
+  * Fixed locfilter linkage for trusty
+
+ -- Ralf Kaestner <ralf.kaestner@gmail.com>  Tue, 30 Sep 2014 15:19:00 +0100
+
 carmen-smartter (0.1-48) unstable; urgency=low
 
   * Fixed smart linkage for trusty
 
- -- Ralf Kaestner <ralf.kaestner@gmail.com>  Tue, 30 Sep 2014 12:53:00 +0100
+ -- Ralf Kaestner <ralf.kaestner@gmail.com>  Tue, 30 Sep 2014 14:53:00 +0100
 
 carmen-smartter (0.1-47) unstable; urgency=low
 
