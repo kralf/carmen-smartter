@@ -52,3 +52,11 @@ remake_distribute_deb(
     remake pkg-config doxygen
   PASS CMAKE_BUILD_TYPE CARMEN_SMARTTER_GIT_REVISION
 )
+remake_distribute_deb(
+  DISTRIBUTION trusty
+  SECTION libs
+  UPLOAD ppa:kralf/asl
+  DEPENDS carmen-dev libaxt-dev libdsp3000-dev libsmartter-dev
+    remake pkg-config doxygen
+  PASS CMAKE_BUILD_TYPE CARMEN_SMARTTER_GIT_REVISION
+)
